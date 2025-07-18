@@ -1,0 +1,19 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct node
+{
+int data;
+struct node* next;
+};
+
+int main()
+{
+struct node* first;
+struct node* N1;
+N1 = (struct node*)malloc(sizeof(struct node));
+N1->data =44;
+N1->next=NULL;
+first = N1;
+printf("Node N1 contains %d\n", N1->data);
+printf("Structure for Node is created.\n");
+}              
