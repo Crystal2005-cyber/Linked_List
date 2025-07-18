@@ -1,4 +1,4 @@
- Link List
+ Linked List
  ____________
 
  A linked list is a linear data structure consisting of a series of connected nodes, each randomly
