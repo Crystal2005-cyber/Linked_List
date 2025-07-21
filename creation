@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <stdlib.h>  // Needed for malloc
+
+struct node {
+    int data;
+    struct node* nextaddr;
+};
+
+// Function to create a new node and add it to the end of the list
+void create(struct node** head, int newdata) {
+    struct node* newNode = (struct node*)malloc(sizeof(struct node));
+    newNode->data = newdata;
+    newNode->nextaddr = NULL;
+
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+
+    struct node* last = *head;
+    while (last->nextaddr != NULL) {
+        last = last->nextaddr;
+    }
+    last->nextaddr = newNode;
+}
+
+// Function to print the linked list
+void printList(struct node* node) {
+    while (node != NULL) {
+        printf("%d -> ", node->data);
+        node = node->nextaddr;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    struct node* head = NULL;
+
+    create(&head, 11);
+    create(&head, 22);
+    create(&head, 33);
+    create(&head, 44);
+
+    printf("Linked list: ");
+    printList(head);
+
+    return 0;
+}
