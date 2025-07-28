@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Node structure
+struct node {
+    int data;
+    struct node* nextaddr;
+};
+
+// Insert at the beginning
+void insertAtBeginning(struct node** head, int newdata) {
+    struct node* newNode = (struct node*)malloc(sizeof(struct node));
+    newNode->data = newdata;
+    newNode->nextaddr = *head;
+    *head = newNode;
+}
+
+// Insert at the end
+void insertAtEnd(struct node** head, int newdata) {
+    struct node* newNode = (struct node*)malloc(sizeof(struct node));
+    newNode->data = newdata;
+    newNode->nextaddr = NULL;
+
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+
+    struct node* temp = *head;
+    while (temp->nextaddr != NULL) {
+        temp = temp->nextaddr;
+    }
+    temp->nextaddr = newNode;
+}
+
+// Print the linked list
+void printList(struct node* node) {
+    while (node != NULL) {
+        printf("%d -> ", node->data);
+        node = node->nextaddr;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    struct node* head = NULL;
+
+    // Inserting some initial nodes
+    insertAtEnd(&head, 22);
+    insertAtEnd(&head, 33);
+    insertAtEnd(&head, 44);
+
+    printf("Original List:\n");
+    printList(head);
+
+    // Insert before the first node
+    insertAtBeginning(&head, 11);
+    printf("\nAfter inserting 11 before the first node:\n");
+    printList(head);
+
+    // Insert after the last node
+    insertAtEnd(&head, 55);
+    printf("\nAfter inserting 55 after the last node:\n");
+    printList(head);
+
+    return 0;
+}
