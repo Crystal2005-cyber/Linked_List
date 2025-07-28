@@ -2,50 +2,44 @@
 #include <stdlib.h>
 
 // Define the structure for a node
-struct Node
- {
+struct Node {
     int data;
     struct Node* next;
 };
 
-
-void printList(struct Node* n)
-{
-    while (n != NULL) {
-        printf("%d -> ", n->data);
-        n = n->next;
+// Function to print the list
+void printList(struct Node* node) {
+    while (node != NULL) {
+        printf("%d -> ", node->data);
+        node = node->next;
     }
     printf("NULL\n");
 }
 
-void append(struct Node** head_ref, int new_data)
- {
-    // Allocate a new node
+// Append a node at the end
+void append(struct Node** head_ref, int new_data) {
     struct Node* new_node = (struct Node*) malloc(sizeof(struct Node));
     struct Node* last = *head_ref;
 
     new_node->data = new_data;
     new_node->next = NULL;
 
-    // If the linked list is empty, make the new node as head
     if (*head_ref == NULL) {
         *head_ref = new_node;
         return;
     }
 
-    // Otherwise, traverse to the last node
     while (last->next != NULL) {
         last = last->next;
     }
 
-    // Change the next of the last node
     last->next = new_node;
-    return;
 }
 
-// Function to delete the first node of the linked list
+// Delete the first node
 void deleteFirstNode(struct Node** head_ref) {
     if (*head_ref == NULL) {
+        printf("List is empty.\n");
         return;
     }
 
@@ -54,20 +48,50 @@ void deleteFirstNode(struct Node** head_ref) {
     free(temp);
 }
 
+// Delete the last node
+void deleteLastNode(struct Node** head_ref) {
+    if (*head_ref == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+
+    if ((*head_ref)->next == NULL) {
+        free(*head_ref);
+        *head_ref = NULL;
+        return;
+    }
+
+    struct Node* second_last = *head_ref;
+    while (second_last->next->next != NULL) {
+        second_last = second_last->next;
+    }
+
+    free(second_last->next);
+    second_last->next = NULL;
+}
 int main() {
     struct Node* head = NULL;
 
-    append(&head, 1);
-    append(&head, 2);
-    append(&head, 3);
+    // Create a sample list
+    append(&head, 10);
+    append(&head, 20);
+    append(&head, 30);
+    append(&head, 40);
+    append(&head, 50);
 
-    printf("Original list:\n");
+    printf("Original List:\n");
     printList(head);
 
+    // Delete first node
     deleteFirstNode(&head);
+    printf("\nAfter deleting first node:\n");
+    printList(head);
 
-    printf("List after deleting the first node:\n");
+    // Delete last node
+    deleteLastNode(&head);
+    printf("\nAfter deleting last node:\n");
     printList(head);
 
     return 0;
 }
+
