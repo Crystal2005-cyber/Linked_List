@@ -1,0 +1,73 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define the structure for a node
+struct Node
+ {
+    int data;
+    struct Node* next;
+};
+
+
+void printList(struct Node* n)
+{
+    while (n != NULL) {
+        printf("%d -> ", n->data);
+        n = n->next;
+    }
+    printf("NULL\n");
+}
+
+void append(struct Node** head_ref, int new_data)
+ {
+    // Allocate a new node
+    struct Node* new_node = (struct Node*) malloc(sizeof(struct Node));
+    struct Node* last = *head_ref;
+
+    new_node->data = new_data;
+    new_node->next = NULL;
+
+    // If the linked list is empty, make the new node as head
+    if (*head_ref == NULL) {
+        *head_ref = new_node;
+        return;
+    }
+
+    // Otherwise, traverse to the last node
+    while (last->next != NULL) {
+        last = last->next;
+    }
+
+    // Change the next of the last node
+    last->next = new_node;
+    return;
+}
+
+// Function to delete the first node of the linked list
+void deleteFirstNode(struct Node** head_ref) {
+    if (*head_ref == NULL) {
+        return;
+    }
+
+    struct Node* temp = *head_ref;
+    *head_ref = (*head_ref)->next;
+    free(temp);
+}
+
+int main() {
+    struct Node* head = NULL;
+
+    append(&head, 1);
+    append(&head, 2);
+    append(&head, 3);
+
+    printf("Original list:\n");
+    printList(head);
+
+    deleteFirstNode(&head);
+
+    printf("List after deleting the first node:\n");
+    printList(head);
+
+    return 0;
+}
