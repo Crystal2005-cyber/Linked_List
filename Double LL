@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define a node for Doubly Linked List
+struct DLLnode {
+    struct DLLnode* Lp; // Left pointer (previous node)
+    int data;
+    struct DLLnode* Rp; // Right pointer (next node)
+};
+
+// Function to create (append) a node at the end
+void create(struct DLLnode** head_ref, int new_data) {
+    // Allocate new node
+    struct DLLnode* new_node = (struct DLLnode*)malloc(sizeof(struct DLLnode));
+    new_node->data = new_data;
+    new_node->Rp = NULL;
+    new_node->Lp = NULL;
+
+    if (*head_ref == NULL) {
+        *head_ref = new_node;
+        return;
+    }
+
+    struct DLLnode* temp = *head_ref;
+
+    // Traverse to the end
+    while (temp->Rp != NULL) {
+        temp = temp->Rp;
+    }
+
+    // Link new node
+    temp->Rp = new_node;
+    new_node->Lp = temp;
+}
+
+// Function to print the list from head to tail
+void display(struct DLLnode* head) {
+    struct DLLnode* temp = head;
+    while (temp != NULL) {
+        printf("%d <-> ", temp->data);
+        temp = temp->Rp;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    struct DLLnode* Head = NULL;
+
+    create(&Head, 10);
+    create(&Head, 20);
+    create(&Head, 30);
+
+    printf("Doubly Linked List:\n");
+    display(Head);
+
+    return 0;
+}
