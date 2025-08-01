@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Define a node for Doubly Linked List
+// Define a node for a Doubly Linked List
 struct DLLnode {
     struct DLLnode* Lp; // Left pointer (previous node)
     int data;
