@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include <stdlib.h>  // Needed for malloc
+#include <stdlib.h> 
+// Needed for malloc
 
 struct node {
     int data;
