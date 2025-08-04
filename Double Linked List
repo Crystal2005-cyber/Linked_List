@@ -1,0 +1,141 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Structure for a node in the doubly linked list
+struct Node {
+    int data;
+    struct Node *prev;
+    struct Node *next;
+};
+
+// Global head pointer
+struct Node *head = NULL;
+
+// Function to create a new node
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed!\n");
+        exit(1);
+    }
+    newNode->data = data;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to insert a node at the beginning
+void insertAtBeginning(int data) {
+    struct Node* newNode = createNode(data);
+    if (head == NULL) {
+        head = newNode;
+    } else {
+        newNode->next = head;
+        head->prev = newNode;
+        head = newNode;
+    }
+    printf("Inserted %d at the beginning.\n", data);
+}
+
+// Function to insert a node at the end
+void insertAtEnd(int data) {
+    struct Node* newNode = createNode(data);
+    if (head == NULL) {
+        head = newNode;
+    } else {
+        struct Node* temp = head;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+        newNode->prev = temp;
+    }
+    printf("Inserted %d at the end.\n", data);
+}
+
+// Function to delete a node by its data
+void deleteNode(int data) {
+    if (head == NULL) {
+        printf("List is empty. Cannot delete.\n");
+        return;
+    }
+
+    struct Node* current = head;
+    while (current != NULL && current->data != data) {
+        current = current->next;
+    }
+
+    if (current == NULL) {
+        printf("Node with data %d not found.\n", data);
+        return;
+    }
+
+    if (current->prev != NULL) {
+        current->prev->next = current->next;
+    } else { // Deleting the head node
+        head = current->next;
+    }
+
+    if (current->next != NULL) {
+        current->next->prev = current->prev;
+    }
+
+    printf("Deleted node with data %d.\n", data);
+    free(current);
+}
+
+// Function to traverse and print the list (forward traversal)
+void traverseForward() {
+    if (head == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+    struct Node* temp = head;
+    printf("Doubly Linked List (Forward): ");
+    while (temp != NULL) {
+        printf("%d <-> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+// Function to traverse and print the list (backward traversal)
+void traverseBackward() {
+    if (head == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+    struct Node* temp = head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    printf("Doubly Linked List (Backward): ");
+    while (temp != NULL) {
+        printf("%d <-> ", temp->data);
+        temp = temp->prev;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    // Creation and Insertion
+    insertAtBeginning(10);
+    insertAtEnd(20);
+    insertAtBeginning(5);
+    insertAtEnd(30);
+
+    // Traversal
+    traverseForward();
+    traverseBackward();
+
+    // Deletion
+    deleteNode(20);
+    traverseForward();
+
+    deleteNode(5);
+    traverseForward();
+
+    deleteNode(100); // Attempt to delete a non-existent node
+
+    return 0;
+}
