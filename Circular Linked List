@@ -1,0 +1,141 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define node structure
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Function to create (append) a node at the end
+void create(struct Node** head_ref, int new_data) {
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+    new_node->data = new_data;
+
+    if (*head_ref == NULL) {
+        *head_ref = new_node;
+        new_node->next = *head_ref; // Point to itself (circular)
+        return;
+    }
+
+    struct Node* temp = *head_ref;
+    while (temp->next != *head_ref) {
+        temp = temp->next;
+    }
+
+    temp->next = new_node;
+    new_node->next = *head_ref; // Maintain circular link
+}
+
+// Function to insert a node after a given value
+void insertAfter(struct Node** head_ref, int key, int new_data) {
+    if (*head_ref == NULL) {
+        printf("List is empty. Cannot insert.\n");
+        return;
+    }
+
+    struct Node* temp = *head_ref;
+    do {
+        if (temp->data == key) {
+            struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+            new_node->data = new_data;
+            new_node->next = temp->next;
+            temp->next = new_node;
+            return;
+        }
+        temp = temp->next;
+    } while (temp != *head_ref);
+
+    printf("Key %d not found in the list.\n", key);
+}
+
+// Function to delete a node by value
+void deleteNode(struct Node** head_ref, int key) {
+    if (*head_ref == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+
+    struct Node *curr = *head_ref, *prev = NULL;
+
+    // Case 1: If node to be deleted is the only node
+    if (curr->data == key && curr->next == *head_ref) {
+        free(curr);
+        *head_ref = NULL;
+        return;
+    }
+
+    // Case 2: If head node needs to be deleted
+    if (curr->data == key) {
+        // Find last node to update its next
+        struct Node* last = *head_ref;
+        while (last->next != *head_ref) {
+            last = last->next;
+        }
+        last->next = curr->next;
+        *head_ref = curr->next;
+        free(curr);
+        return;
+    }
+
+    // Case 3: Deleting other nodes
+    prev = curr;
+    curr = curr->next;
+    while (curr != *head_ref && curr->data != key) {
+        prev = curr;
+        curr = curr->next;
+    }
+
+    if (curr->data == key) {
+        prev->next = curr->next;
+        free(curr);
+    } else {
+        printf("Key %d not found in the list.\n", key);
+    }
+}
+
+// Function to traverse and display the list
+void traverse(struct Node* head) {
+    if (head == NULL) {
+        printf("List is empty.\n");
+        return;
+    }
+
+    struct Node* temp = head;
+    do {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    } while (temp != head);
+    printf("(back to head)\n");
+}
+
+// Main function
+int main() {
+    struct Node* head = NULL;
+
+    // Creation
+    create(&head, 11);
+    create(&head, 22);
+    create(&head, 33);
+    create(&head, 44);
+
+    printf("Circular Linked List after creation:\n");
+    traverse(head);
+
+    // Insertion
+    insertAfter(&head, 22, 25);
+    printf("\nAfter inserting 25 after 22:\n");
+    traverse(head);
+
+    // Deletion
+    deleteNode(&head, 33);
+    printf("\nAfter deleting 33:\n");
+    traverse(head);
+
+    // Deletion of head
+    deleteNode(&head, 11);
+    printf("\nAfter deleting 11 (head node):\n");
+    traverse(head);
+
+    return 0;
+}
